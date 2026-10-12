@@ -240,9 +240,10 @@ section h2::after {
   height: 300px;
   object-fit: cover;
   object-position: center top;
-  border-radius: 4px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
-
 /* Fallback shown only if profile.jpg is missing */
 .monogram {
   display: none;
