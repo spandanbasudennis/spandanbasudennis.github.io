@@ -25,11 +25,16 @@
 </head>
 <body>
 
-  <header class="site-header">
+  <a class="skip-link" href="#research">Skip to content</a>
+
+  <!-- Thin reading-progress bar at the very top -->
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header" id="site-header">
     <div class="container header-inner">
       <a class="brand" href="#home">Spandan Basu Dennis</a>
       <div class="header-right">
-        <nav aria-label="Main navigation">
+        <nav id="main-nav" aria-label="Main navigation">
           <ul>
             <li><a href="#research">Research</a></li>
             <li><a href="#publications">Publications</a></li>
@@ -42,7 +47,7 @@
 
         <div class="header-actions">
           <!-- Query button: opens the query form -->
-          <button type="button" class="btn" id="open-query" aria-haspopup="dialog" aria-controls="query-dialog">
+          <button type="button" class="btn" id="open-query" aria-haspopup="dialog" aria-controls="query-dialog" aria-label="Send a query">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span>Query</span>
           </button>
@@ -51,6 +56,11 @@
           <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Switch theme">
             <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          </button>
+
+          <!-- Mobile menu button (only visible on small screens) -->
+          <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
+            <span></span><span></span><span></span>
           </button>
         </div>
       </div>
@@ -61,10 +71,21 @@
 
     <!-- Home / Introduction -->
     <section id="home" class="hero">
+      <!-- Soft drifting light in the background (decorative) -->
+      <div class="hero-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
       <div class="container hero-inner">
         <div class="hero-text">
+          <!-- Changes with the visitor's local time: Good morning / afternoon / evening -->
+          <p class="hero-greeting" id="hero-greeting">
+            <span class="greeting-dot" aria-hidden="true"></span>
+            <span id="greeting-text">Hello, and welcome</span>
+          </p>
           <h1>Spandan Basu Dennis</h1>
           <p class="hero-degrees">BSc in Engineering</p>
+          <p class="hero-tagline">
+            Building autonomous systems that perceive, reason and act&nbsp;safely in the real world.
+          </p>
           <p class="hero-affiliation">
             Department of Computer Science &amp; Engineering<br>
             Rajshahi University of Engineering &amp; Technology
@@ -117,6 +138,36 @@
                onerror="this.parentElement.classList.add('no-photo')">
           <span class="monogram" aria-hidden="true">SB</span>
         </figure>
+      </div>
+
+      <a class="scroll-cue" href="#inspiration" aria-label="Scroll down">
+        <span aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <!--
+      ROTATING QUOTES
+      The quotes change automatically every few seconds.
+      To add or edit quotes, find "var QUOTES" in the script near the bottom of this file.
+    -->
+    <section id="inspiration" class="quote-band" aria-label="Quote">
+      <div class="container quote-inner">
+        <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+        <figure class="quote" id="quote">
+          <p class="quote-theme" id="quote-theme">On curiosity</p>
+          <blockquote id="quote-text">The important thing is not to stop questioning. Curiosity has its own reason for existing.</blockquote>
+          <figcaption id="quote-author">Albert Einstein</figcaption>
+        </figure>
+        <div class="quote-controls">
+          <button type="button" class="quote-nav" id="quote-prev" aria-label="Previous quote">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="quote-dots" id="quote-dots" role="group" aria-label="Choose a quote"></div>
+          <button type="button" class="quote-nav" id="quote-next" aria-label="Next quote">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+        <div class="quote-progress" aria-hidden="true"><span id="quote-progress-bar"></span></div>
       </div>
     </section>
 
@@ -291,9 +342,15 @@
 
   <footer class="site-footer">
     <div class="container">
+      <p class="footer-note">Thank you for visiting. Have a wonderful day.</p>
       <p>&copy; 2026 Spandan Basu. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Back-to-top button (appears after scrolling down) -->
+  <button type="button" class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
 
   <!-- ==========================================================
        QUERY FORM
@@ -366,6 +423,169 @@
         updateToggleLabel();
       });
       updateToggleLabel();
+
+      var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ---------- Time-of-day greeting ---------- */
+      (function () {
+        var h = new Date().getHours();
+        var text;
+        if (h >= 5 && h < 12) text = "Hello Sunshine, I hope you will get the best version you today";
+        else if (h >= 12 && h < 17) text = "Hello bright spark, welcome to a tiny part of myself";
+        else if (h >= 17 && h < 21) text = "Hello, evening breeze, Congrats for your outstanding day;";
+        else text = "Hello, night owl, May you get a sound sleep today";
+        document.getElementById("greeting-text").textContent = text;
+      })();
+
+      /* ---------- Rotating quotes ----------
+         Add, remove or edit quotes here. "theme" is the small label above the quote. */
+      var QUOTES = [
+        { theme: "On curiosity", text: "The important thing is not to stop questioning. Curiosity has its own reason for existing.", author: "Albert Einstein" },
+        { theme: "On the road ahead", text: "We can only see a short distance ahead, but we can see plenty there that needs to be done.", author: "Alan Turing" },
+        { theme: "On building", text: "The best way to predict the future is to invent it.", author: "Alan Kay" },
+        { theme: "On wonder", text: "Remember to look up at the stars and not down at your feet.", author: "Stephen Hawking" },
+        { theme: "On understanding", text: "What I cannot create, I do not understand.", author: "Richard Feynman" },
+        { theme: "On courage", text: "Let me not pray to be sheltered from dangers but to be fearless in facing them.", author: "Rabindranath Tagore" },
+        { theme: "On fear and knowledge", text: "Nothing in life is to be feared, it is only to be understood.", author: "Marie Curie" },
+        { theme: "On keeping balance", text: "Life is like riding a bicycle. To keep your balance, you must keep moving.", author: "Albert Einstein" }
+      ];
+      var QUOTE_INTERVAL = 9000; // milliseconds between quotes
+
+      var quoteEl = document.getElementById("quote");
+      var qTheme = document.getElementById("quote-theme");
+      var qText = document.getElementById("quote-text");
+      var qAuthor = document.getElementById("quote-author");
+      var dotsWrap = document.getElementById("quote-dots");
+      var progressBar = document.getElementById("quote-progress-bar");
+      var band = document.getElementById("inspiration");
+      var qIndex = Math.floor(Math.random() * QUOTES.length); // a different first quote each visit
+      var qTimer = null;
+      var qPaused = false;
+
+      QUOTES.forEach(function (_, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "quote-dot";
+        b.setAttribute("aria-label", "Quote " + (i + 1));
+        b.addEventListener("click", function () { showQuote(i); restartQuotes(); });
+        dotsWrap.appendChild(b);
+      });
+      var dots = dotsWrap.querySelectorAll(".quote-dot");
+
+      function renderQuote() {
+        var q = QUOTES[qIndex];
+        qTheme.textContent = q.theme;
+        qText.textContent = q.text;
+        qAuthor.textContent = q.author;
+        dots.forEach(function (d, i) {
+          d.classList.toggle("active", i === qIndex);
+          d.setAttribute("aria-current", i === qIndex ? "true" : "false");
+        });
+      }
+
+      function showQuote(i) {
+        var next = (i + QUOTES.length) % QUOTES.length;
+        if (next === qIndex && qText.textContent) return;
+        qIndex = next;
+        if (reduceMotion) { renderQuote(); return; }
+        quoteEl.classList.add("is-changing");
+        setTimeout(function () {
+          renderQuote();
+          quoteEl.classList.remove("is-changing");
+        }, 450);
+      }
+
+      function animateProgress() {
+        progressBar.style.transition = "none";
+        progressBar.style.transform = "scaleX(0)";
+        void progressBar.offsetWidth;
+        if (qPaused || reduceMotion) return;
+        progressBar.style.transition = "transform " + QUOTE_INTERVAL + "ms linear";
+        progressBar.style.transform = "scaleX(1)";
+      }
+
+      function restartQuotes() {
+        clearInterval(qTimer);
+        animateProgress();
+        if (qPaused) return;
+        qTimer = setInterval(function () {
+          showQuote(qIndex + 1);
+          animateProgress();
+        }, QUOTE_INTERVAL);
+      }
+
+      document.getElementById("quote-prev").addEventListener("click", function () { showQuote(qIndex - 1); restartQuotes(); });
+      document.getElementById("quote-next").addEventListener("click", function () { showQuote(qIndex + 1); restartQuotes(); });
+
+      // Pause while the visitor is reading (hover or keyboard focus)
+      function pause() { qPaused = true; restartQuotes(); }
+      function resume() { qPaused = false; restartQuotes(); }
+      band.addEventListener("mouseenter", pause);
+      band.addEventListener("mouseleave", resume);
+      band.addEventListener("focusin", pause);
+      band.addEventListener("focusout", function (e) { if (!band.contains(e.relatedTarget)) resume(); });
+
+      renderQuote();
+      restartQuotes();
+
+      /* ---------- Mobile menu ---------- */
+      var header = document.getElementById("site-header");
+      var navToggle = document.getElementById("nav-toggle");
+
+      function setMenu(open) {
+        header.classList.toggle("nav-open", open);
+        navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      }
+      navToggle.addEventListener("click", function () {
+        setMenu(!header.classList.contains("nav-open"));
+      });
+      document.querySelectorAll("#main-nav a").forEach(function (a) {
+        a.addEventListener("click", function () { setMenu(false); });
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") setMenu(false);
+      });
+
+      /* ---------- Highlight the current section in the menu ---------- */
+      var navLinks = {};
+      document.querySelectorAll("#main-nav a").forEach(function (a) {
+        navLinks[a.getAttribute("href").slice(1)] = a;
+      });
+      if ("IntersectionObserver" in window) {
+        var spy = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            Object.keys(navLinks).forEach(function (id) {
+              navLinks[id].classList.toggle("active", id === entry.target.id);
+            });
+          });
+        }, { rootMargin: "-45% 0px -50% 0px" });
+        document.querySelectorAll("main > section[id]").forEach(function (s) { spy.observe(s); });
+      }
+
+      /* ---------- Reading progress + back-to-top ---------- */
+      var progress = document.getElementById("scroll-progress");
+      var toTop = document.getElementById("back-to-top");
+      var ticking = false;
+
+      function onScroll() {
+        var doc = document.documentElement;
+        var max = doc.scrollHeight - doc.clientHeight;
+        var y = window.scrollY || doc.scrollTop;
+        progress.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+        toTop.classList.toggle("visible", y > 600);
+        header.classList.toggle("scrolled", y > 8);
+        ticking = false;
+      }
+      window.addEventListener("scroll", function () {
+        if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+      }, { passive: true });
+      onScroll();
+
+      toTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      });
 
       /* ---------- Query form ---------- */
       var MAX_WORDS = 500;
