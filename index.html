@@ -10,23 +10,50 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Apply saved / system theme before the page paints (prevents a flash) -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
 </head>
 <body>
 
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="#home">Spandan Basu Dennis</a>
-      <nav aria-label="Main navigation">
-        <ul>
-          <li><a href="#research">Research</a></li>
-          <li><a href="#publications">Publications</a></li>
-          <li><a href="#education">Education</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#activities">Activities</a></li>
-          <li><a href="#about">About</a></li>
-          
-        </ul>
-      </nav>
+      <div class="header-right">
+        <nav aria-label="Main navigation">
+          <ul>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#activities">Activities</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <!-- Query button: opens the query form -->
+          <button type="button" class="btn" id="open-query" aria-haspopup="dialog" aria-controls="query-dialog">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Query</span>
+          </button>
+
+          <!-- Light / dark mode toggle -->
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Switch theme">
+            <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -267,6 +294,189 @@
       <p>&copy; 2026 Spandan Basu. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- ==========================================================
+       QUERY FORM
+       Submissions are sent to your email through Web3Forms (free).
+       1. Go to https://web3forms.com and enter basuspandan561@gmail.com
+       2. Copy the Access Key they email you
+       3. Paste it below in place of YOUR_ACCESS_KEY_HERE
+       ========================================================== -->
+  <dialog class="query-dialog" id="query-dialog" aria-labelledby="query-title">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <h2 id="query-title">Send a Query</h2>
+        <button type="button" class="dialog-close" id="close-query" aria-label="Close form">&times;</button>
+      </div>
+      <p class="dialog-intro">Have a question or want to get in touch? Fill out the form and I will get back to you.</p>
+
+      <form id="query-form" novalidate>
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        <input type="hidden" name="from_name" value="Portfolio Query Form">
+        <!-- Spam trap: real visitors never see or fill this -->
+        <input type="checkbox" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="form-field">
+          <label for="q-name">Name <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="q-name" name="name" autocomplete="name" maxlength="100" required>
+        </div>
+
+        <div class="form-field">
+          <label for="q-email">Email address <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="q-email" name="email" autocomplete="email" maxlength="150" required>
+        </div>
+
+        <div class="form-field">
+          <label for="q-subject">Subject <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="q-subject" name="subject" maxlength="150" required>
+        </div>
+
+        <div class="form-field">
+          <label for="q-message">Query <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="q-message" name="message" rows="6" required aria-describedby="q-count"></textarea>
+          <p class="word-count" id="q-count" aria-live="polite">0 / 500 words</p>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="cancel-query">Cancel</button>
+          <button type="submit" class="btn" id="submit-query">Submit</button>
+        </div>
+
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </dialog>
+
+  <script>
+    (function () {
+      /* ---------- Theme toggle ---------- */
+      var root = document.documentElement;
+      var toggle = document.getElementById("theme-toggle");
+
+      function updateToggleLabel() {
+        var dark = root.getAttribute("data-theme") === "dark";
+        toggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+        toggle.setAttribute("title", dark ? "Switch to light mode" : "Switch to dark mode");
+      }
+
+      toggle.addEventListener("click", function () {
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+        updateToggleLabel();
+      });
+      updateToggleLabel();
+
+      /* ---------- Query form ---------- */
+      var MAX_WORDS = 500;
+      var dialog = document.getElementById("query-dialog");
+      var form = document.getElementById("query-form");
+      var message = document.getElementById("q-message");
+      var counter = document.getElementById("q-count");
+      var statusEl = document.getElementById("form-status");
+      var submitBtn = document.getElementById("submit-query");
+
+      function openDialog() {
+        if (typeof dialog.showModal === "function") {
+          dialog.showModal();
+        } else {
+          dialog.setAttribute("open", "");
+        }
+        document.getElementById("q-name").focus();
+      }
+
+      function closeDialog() {
+        if (typeof dialog.close === "function") {
+          dialog.close();
+        } else {
+          dialog.removeAttribute("open");
+        }
+      }
+
+      document.getElementById("open-query").addEventListener("click", openDialog);
+      document.getElementById("close-query").addEventListener("click", closeDialog);
+      document.getElementById("cancel-query").addEventListener("click", closeDialog);
+
+      // Close when clicking the dark area outside the form
+      dialog.addEventListener("click", function (e) {
+        if (e.target === dialog) closeDialog();
+      });
+
+      function countWords(text) {
+        var t = text.trim();
+        return t ? t.split(/\s+/).length : 0;
+      }
+
+      function updateCount() {
+        var n = countWords(message.value);
+        var over = n > MAX_WORDS;
+        counter.textContent = n + " / " + MAX_WORDS + " words" + (over ? " — please shorten your query" : "");
+        counter.classList.toggle("over-limit", over);
+        message.classList.toggle("over-limit", over);
+        return n;
+      }
+
+      message.addEventListener("input", updateCount);
+
+      function setStatus(text, type) {
+        statusEl.textContent = text;
+        statusEl.className = "form-status" + (type ? " " + type : "");
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        setStatus("", "");
+
+        var name = form.name.value.trim();
+        var email = form.email.value.trim();
+        var subject = form.subject.value.trim();
+        var words = updateCount();
+
+        if (!name || !email || !subject || !message.value.trim()) {
+          setStatus("Please fill in all fields.", "error");
+          return;
+        }
+        if (!form.email.checkValidity()) {
+          setStatus("Please enter a valid email address.", "error");
+          form.email.focus();
+          return;
+        }
+        if (words > MAX_WORDS) {
+          setStatus("Your query is " + words + " words. The limit is " + MAX_WORDS + " words.", "error");
+          message.focus();
+          return;
+        }
+
+        var data = Object.fromEntries(new FormData(form));
+        data.subject = "Portfolio query: " + subject;
+
+        submitBtn.disabled = true;
+        setStatus("Sending…", "");
+
+        fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify(data)
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (result) {
+            if (result.success) {
+              form.reset();
+              updateCount();
+              setStatus("Thank you! Your query has been sent.", "success");
+            } else {
+              setStatus("Sorry, something went wrong. Please try again or email me directly.", "error");
+            }
+          })
+          .catch(function () {
+            setStatus("Network error. Please try again or email me directly.", "error");
+          })
+          .finally(function () {
+            submitBtn.disabled = false;
+          });
+      });
+    })();
+  </script>
 
 </body>
 </html>
